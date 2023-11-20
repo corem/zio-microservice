@@ -1,6 +1,6 @@
 package service
 
-import model.Challenge
+import model._
 import zio._
 
 case class ChallengeServiceImpl(randomGeneratorService: RandomGeneratorService) extends ChallengeService {
@@ -9,6 +9,10 @@ case class ChallengeServiceImpl(randomGeneratorService: RandomGeneratorService) 
       id1 <- randomGeneratorService.generateRandomFactor()
       id2 <- randomGeneratorService.generateRandomFactor()
     } yield Challenge(id1, id2)
+  }
+
+  def checkAttempt(attempt: ChallengeAttempt): Task[Boolean] = {
+    ZIO.succeed(attempt.challenge.valueA * attempt.challenge.valueB == attempt.resultAttempt)
   }
 }
 
